@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shikumi Uploader</title>
+<style>
+/* VOICE 規約の書面。平明で、事実だけ
+   IDEA 1枚の届出書。上に名前と要点、下に条文
+   PICTURE なし（書面そのもの）
+   COLOUR 白地に墨、見出しの線だけ紺。夜は墨地
+   LAYOUT 1列、70字幅 */
+:root{color-scheme:light dark;--bg:light-dark(#fff,#121417);--ink:light-dark(#16191d,#e8eaee);--mute:light-dark(#5a6270,#9aa2b0);--line:light-dark(#dfe3e8,#2b3038);--acc:light-dark(#1d3f8f,#8fb0ff)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 "Hiragino Sans","Noto Sans JP",system-ui,sans-serif;overflow-x:clip}
+main{max-width:760px;margin:0 auto;padding:clamp(24px,5vw,56px) max(5vw,16px) 72px}
+h1{font-size:clamp(28px,4vw,40px);line-height:1.1;margin:0 0 6px}
+.sub{color:var(--mute);margin:0 0 28px}
+.lead{border-left:4px solid var(--acc);padding:4px 0 4px 16px;margin:0 0 32px}
+h2{font-size:20px;line-height:1.3;margin:36px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:16px;margin:20px 0 4px}
+p,li{max-width:68ch}
+ul{padding-left:1.3em}
+code{font-size:14px;overflow-wrap:anywhere}
+a{color:var(--acc)}
+.en{color:var(--mute);font-size:15px}
+footer{margin-top:44px;color:var(--mute);font-size:14px;border-top:1px solid var(--line);padding-top:14px}
+</style>
+</head>
+<body>
+<main>
+<h1>Shikumi Uploader</h1>
+<p class="sub">プライバシーポリシーと説明 ／ Privacy Policy and description　—　最終更新 2026年11月26日</p>
+
+<p class="lead">Shikumi Uploader は、YouTube チャンネル「お金と世界のしくみ研究所」の運営者が、自分で作った動画を自分のチャンネルにアップロードし、公開日時を予約するためだけに使う個人用のデスクトップ用スクリプトです。運営者本人以外の利用者はいません。<br><span class="en">Shikumi Uploader is a private desktop script used only by the owner of the YouTube channel “お金と世界のしくみ研究所” to upload the owner’s own original videos to the owner’s own channel and schedule their publication. It has no other users.</span></p>
+
+<h2 id="what">1. このツールがすること</h2>
+<ul>
+<li>運営者のパソコンにある動画ファイルと予約表を読み、YouTube Data API で動画をアップロードし、タイトル・説明・カテゴリ・サムネイル・公開日時を設定します（videos.insert、thumbnails.set）。</li>
+<li>運営者が予約表で動画を差し替えたときだけ、運営者自身がアップロードしたまだ公開前の動画を削除します（videos.delete）。</li>
+<li>公開後、運営者自身のコメントを書き込むことがあります（commentThreads.insert）。</li>
+</ul>
+<p class="en">It reads video files and a schedule on the owner’s computer and uses the YouTube Data API to upload videos and set their title, description, category, thumbnail and scheduled publish time. It deletes only the owner’s own not-yet-published videos when the owner replaces them in the schedule, and may post the owner’s own comment after publication.</p>
+
+<h2 id="research">2. 公開されている動画の調べもの</h2>
+<p>運営者が自分の動画の企画のために、YouTube で一般に公開されている動画・チャンネルの情報（タイトル、公開日、再生回数、チャンネル名など）を検索・取得します（search.list、videos.list、channels.list、playlistItems.list）。取得した情報は運営者のパソコンの中でだけ使い、公開・第三者への提供はしません。YouTube API サービスのデベロッパー ポリシーに従い、保存した公開データは30日以内に削除または更新します。</p>
+<p class="en">For planning the owner's own videos, the tool searches and retrieves information about publicly available YouTube videos and channels (title, publish date, view count, channel name, etc.) via search.list, videos.list, channels.list and playlistItems.list. This data is used only on the owner's computer, is never published or shared with third parties, and stored public data is deleted or refreshed within 30 days in accordance with the YouTube API Services Developer Policies.</p>
+
+<h2 id="data">3. 扱うデータ</h2>
+<ul>
+<li>使うのは、運営者が Google のログイン（OAuth）で許可した、運営者自身の YouTube チャンネルへの操作の権限だけです（<code>youtube.upload</code>、<code>youtube.force-ssl</code>、自分のチャンネルの分析の数字を読む <code>yt-analytics.readonly</code>）。</li>
+<li>ほかの人のアカウントや、非公開の情報にアクセスすることはありません。</li>
+<li>許可の鍵（OAuth トークン）と、どの動画を上げたかの記録は、運営者のパソコンの中にだけ保存され、ほかのサーバーや第三者に送られることはありません。</li>
+<li>広告、解析ツール、Cookie は使いません。</li>
+</ul>
+<p class="en">The tool only uses the permissions the owner granted via Google OAuth for the owner’s own channel (youtube.upload, youtube.force-ssl, and yt-analytics.readonly to read the owner’s own channel analytics). It does not access any other person's account or any non-public data. The OAuth token and the upload log are stored only on the owner’s computer and are never sent to any other server or third party. No ads, analytics or cookies are used.</p>
+
+<h2 id="share">4. 第三者への提供</h2>
+<p>このツールが扱うデータを第三者に提供・販売することはありません。データの送り先は、運営者の操作を実行するための YouTube（Google）だけです。</p>
+<p class="en">No data is shared with or sold to third parties. Data is sent only to YouTube (Google) to carry out the owner’s own actions.</p>
+
+<h2 id="revoke">5. 許可の取り消しと削除</h2>
+<p>許可は、Google アカウントの「サードパーティ製のアプリとサービス」（<a href="https://myaccount.google.com/permissions">https://myaccount.google.com/permissions</a>）からいつでも取り消せます。取り消すと、ツールはチャンネルを操作できなくなります。パソコンに保存した鍵と記録は、運営者がいつでも削除できます。</p>
+<p class="en">Access can be revoked at any time from Google Account → Third-party apps &amp; services (https://myaccount.google.com/permissions). The locally stored token and log can be deleted by the owner at any time.</p>
+
+<h2 id="terms">6. YouTube と Google の規約</h2>
+<p>このツールは YouTube API サービスを使っています。利用にあたっては <a href="https://www.youtube.com/t/terms">YouTube 利用規約</a> と <a href="https://policies.google.com/privacy">Google プライバシー ポリシー</a> が適用されます。</p>
+<p class="en">This tool uses YouTube API Services. By using it you are bound by the <a href="https://www.youtube.com/t/terms">YouTube Terms of Service</a> and the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.</p>
+
+<h2 id="contact">7. 連絡先</h2>
+<p>このツールについての問い合わせは、YouTube チャンネル「お金と世界のしくみ研究所」（<a href="https://www.youtube.com/channel/UCyLrLVUMshH-fBy2wIYiAaQ">https://www.youtube.com/channel/UCyLrLVUMshH-fBy2wIYiAaQ</a>）の運営者まで。</p>
+<p class="en">Contact: the owner of the YouTube channel above.</p>
+
+<footer>Shikumi Uploader ／ お金と世界のしくみ研究所</footer>
+</main>
+</body>
+</html>
